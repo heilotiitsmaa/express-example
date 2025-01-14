@@ -22,6 +22,16 @@ let posts = [
     {id: 3, title: 'Post 3'},
 ];
 
+let products = [
+    {id: 1, title: 'Talvesaapad'},
+    {id: 2, title: 'Sall'},
+    {id: 3, title: 'Kindad'},
+    {id: 4, title: 'Müts'},
+    {id: 5, title: 'Sukkpüksid'},
+    {id: 6, title: 'Karupüksid'},
+    {id: 7, title: 'Sulejope'},
+];
+
 //get all posts
 app.get('/api/posts', (req, res) => {
     const limit = parseInt(req.query.limit);
@@ -45,6 +55,29 @@ app.get('/api/posts/:id', (req, res) => {
     }
         res.status(200).json(post);
         
+});
+
+//get all products
+app.get('/api/products', (req, res) => {
+    const limit = parseInt(req.query.limit)
+    if(!isNaN(limit) && limit>0) {
+        return res.status(200).json(products.slice(0, limit));
+    }
+    //res.send('Products');
+    res.status(200).json(products);
+});
+
+//get single product
+app.get('/api/products/:id', (req, res) => {
+    const id = parseInt (req.params.id);
+    const product = products.find(product => product.id === id);
+    
+    if(!product) {
+        return res
+        .status(404)
+        .json({ msg: `Toodet id'ga ${id} ei leitud`});
+    }
+    res.status(200).json(product);
 });
 
 app.listen(port, () => console.log(`Server töötab pordis ${port}`));
